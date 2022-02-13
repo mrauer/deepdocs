@@ -8,12 +8,13 @@ import sys
 import zipfile
 
 import rarfile
+import argparse
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 log = logging.getLogger(__name__)
 
-OUTPUT_FILE = './output.txt'
+DEFAUT_OUTPUT_FILE = './output.txt'
 RAR_EXTENSIONS = ['.rar']
 ZIP_EXTENSIONS = ['.zip']
 # .gz
@@ -41,43 +42,52 @@ def scan_zip(filepath):
     return zipfile.ZipFile(filepath).namelist()
 
 
-def write_to_file(file, docs):
+def write_to_file(output, file, docs):
     """ Write to the output file."""
-    with open(OUTPUT_FILE, 'a') as f:
+    with open(output, 'a') as f:
         for doc in docs:
             out = '{}\t{}'.format(file, doc)
             log.info(out)
             f.write('{}\n'.format(out))
 
 
-def main(argv):
-    print(argv[0])
-    if len(argv) == 0:
-        log.error('The path argument is required')
+def main():
+    parser = argparse.ArgumentParser(description='Find docs recursively in a directory including in archives.')
+    parser.add_argument('--path', type=str, help='The path the start the search from')
+    parser.add_argument('--output', type=str, help='The output file', default=DEFAUT_OUTPUT_FILE)
+    parser.add_argument('--skip-txt', action='store_true', help='Skip .txt files')
+
+    args = parser.parse_args()
+
+    if args.path is None:
+        log.error('The `path` argument is required')
         return 1
 
-    open(OUTPUT_FILE, 'w')
+    open(args.output, 'w')
 
-    files = get_files(argv[0])
+    files = get_files(args.path)
+
+    if args.skip_txt:
+        DOC_EXTENSIONS.remove('.txt')
 
     # root files.
     docs = filter_by_extensions(files, DOC_EXTENSIONS)
-    write_to_file('root', docs)
+    write_to_file(args.output, 'root', docs)
 
     # .rar files.
     rar_files = filter_by_extensions(files, RAR_EXTENSIONS)
     for rar_file in rar_files:
         docs = filter_by_extensions(scan_rar(rar_file), DOC_EXTENSIONS)
-        write_to_file(rar_file, docs)
+        write_to_file(args.output, rar_file, docs)
 
     # .zip files.
     zip_files = filter_by_extensions(files, ZIP_EXTENSIONS)
     for zip_file in zip_files:
         docs = filter_by_extensions(scan_zip(zip_file), DOC_EXTENSIONS)
-        write_to_file(zip_file, docs)
+        write_to_file(args.output, zip_file, docs)
 
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())
