@@ -1,14 +1,15 @@
 #!/usr/local/bin/python3
 
+import argparse
 import glob
 import logging
 import os
 import pathlib
 import sys
+import tarfile
 import zipfile
 
 import rarfile
-import argparse
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
@@ -17,8 +18,7 @@ log = logging.getLogger(__name__)
 DEFAUT_OUTPUT_FILE = './output.txt'
 RAR_EXTENSIONS = ['.rar']
 ZIP_EXTENSIONS = ['.zip']
-# .gz
-# .tar.gz
+GZ_EXTENSIONS = ['.gz']
 DOC_EXTENSIONS = ['.txt', '.doc', '.docx', '.odt', '.rtf']
 
 
@@ -40,6 +40,11 @@ def scan_rar(filepath):
 def scan_zip(filepath):
     """ Scan the files inside of a .zip archive. """
     return zipfile.ZipFile(filepath).namelist()
+
+
+def scan_gz(filepath):
+    """ Scan a .tar.gz file. """
+    return tarfile.open(filepath, 'r:gz').getnames()
 
 
 def write_to_file(output, file, docs):
@@ -85,6 +90,13 @@ def main():
     for zip_file in zip_files:
         docs = filter_by_extensions(scan_zip(zip_file), DOC_EXTENSIONS)
         write_to_file(args.output, zip_file, docs)
+
+    # .tar.gz files.
+    gz_files = filter_by_extensions(files, GZ_EXTENSIONS)
+    filter_gz_files = [x for x in gz_files if x.find('.tar') != -1]
+    for gz_file in filter_gz_files:
+        docs = filter_by_extensions(scan_gz(gz_file), DOC_EXTENSIONS)
+        write_to_file(args.output, gz_file, docs)
 
     return 0
 
