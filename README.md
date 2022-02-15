@@ -2,13 +2,13 @@
 
 `Deepdocs` is small script that aim to search doc files (.txt, .doc, .docx, .odt, .rtf) recursively in a data drive. This also search in archives content without extracting it.
 
-The motivation of making this software have been the need to look for specific document in hundreds of SD cards that contains thousands of archives.
+The motivation of making this software have been the personal need of searching for a specific document in a hundreds of SD cards containing thousands of archives.
+
+## First Use
 
 To get started, run the following command in the root directory:
 
->```
-mkdir venv && (cd venv;python3 -m venv env) && (cd venv;source env/bin/activate)
-```
+>```mkdir venv && (cd venv;python3 -m venv env) && (cd venv;source env/bin/activate)```
 
 Then execute the following command to install the requirements:
 
@@ -16,7 +16,9 @@ Then execute the following command to install the requirements:
 ./venv/env/bin/pip3.9 install -r requirements.txt
 ```
 
-You are now good to go to run `Deepdocs`. The path argument is in my case a mounted SD card:
+## Usage
+
+You are now ready to run `Deepdocs`. The `path` argument is in my case a mounted SD card:
 
 ```sh
 ./venv/env/bin/python3 deepdocs.py --path /Volumes/NO\ NAME
@@ -30,6 +32,4 @@ The above command will store the files found in a .txt file named `output.txt` a
 
 And you can also skip the `.txt` files:
 
-```sh
-./venv/env/bin/python3 deepdocs.py --path /Volumes/NO\ NAME --output /tmp/anything.txt --skip-txt
-```
+>```./venv/env/bin/python3 deepdocs.py --path /Volumes/NO\ NAME --output /tmp/anything.txt --skip-txt```
