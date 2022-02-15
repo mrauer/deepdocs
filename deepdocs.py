@@ -15,7 +15,8 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 log = logging.getLogger(__name__)
 
-DEFAUT_OUTPUT_FILE = './output.txt'
+DEFAULT_OUTPUT_FILE = './output.txt'
+
 RAR_EXTENSIONS = ['.rar']
 ZIP_EXTENSIONS = ['.zip']
 GZ_EXTENSIONS = ['.gz']
@@ -57,9 +58,9 @@ def write_to_file(output, file, docs):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Find docs recursively in a directory including in archives.')
-    parser.add_argument('--path', type=str, help='The path the start the search from')
-    parser.add_argument('--output', type=str, help='The output file', default=DEFAUT_OUTPUT_FILE)
+    parser = argparse.ArgumentParser(description='Find docs recursively in a directory including in archives')
+    parser.add_argument('--path', type=str, help='The path to start the search from')
+    parser.add_argument('--output', type=str, help='The output file', default=DEFAULT_OUTPUT_FILE)
     parser.add_argument('--skip-txt', action='store_true', help='Skip .txt files')
 
     args = parser.parse_args()
