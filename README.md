@@ -1,12 +1,12 @@
 # Deepdocs
 
-`Deepdocs` is small script that aim to search doc files (.txt, .doc, .docx, .odt, .rtf) recursively in a data drive. This also search in archives content without extracting it.
+`Deepdocs` is a small script that aims to search doc files (.txt, .doc, .docx, .odt, .rtf) recursively in a data drive. This also searches in archives content without extracting it.
 
-The motivation of making this software have been the personal need of searching for a specific document in a hundreds of SD cards containing thousands of archives.
+The motivation of making this software has been the personal need of searching for a specific document in hundreds of SD cards containing thousands of archives.
 
 ## First Use
 
-To get started, run the following command in the root directory:
+To get started, run the following command in the root directory. It will create a virtual environment for Python:
 
 >```mkdir venv && (cd venv;python3 -m venv env) && (cd venv;source env/bin/activate)```
 
@@ -18,7 +18,7 @@ Then execute the following command to install the requirements:
 
 ## Usage
 
-You are now ready to run `Deepdocs`. The `path` argument is in my case a mounted SD card:
+You are now ready to run `Deepdocs`. The `path` argument is in my case a mounted SD card on a Mac system:
 
 ```sh
 ./venv/env/bin/python3 deepdocs.py --path /Volumes/NO\ NAME
